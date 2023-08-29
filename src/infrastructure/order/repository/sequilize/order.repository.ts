@@ -52,30 +52,23 @@ export default class OrderRepository {
   }
 
   async find(id: string): Promise<Order> {
-    let orderModel;
-    try {
-      orderModel = await OrderModel.findOne({
-        where: {
-          id,
-        },
-        rejectOnEmpty: true,
-      });
-    } catch (error) {
-      throw new Error("Customer not found");
-    }
-    const items = orderModel.items.map((item) => {
-      return new OrderItem(
-        item.id,
-        item.name,
-        item.price,
-        item.product_id,
-        item.quantity
-      );
-    });
+		let ordersModel;
 
-    return new Order(orderModel.id, orderModel.customer_id, items);
-  }
-  
+		try {
+			ordersModel = await OrderModel.findOne({
+				where: { id },
+				include: [{ model: OrderItemModel }],
+				rejectOnEmpty: true,
+			});
+		} catch (error) {
+			throw new Error(`Order with id: ${id} not found`);
+		}
+
+		const items = ordersModel.items.map(orderItemModel);
+		const order = new Order(ordersModel.id, ordersModel.customer_id, items);
+
+		return order;
+	}  
 	async findAll(): Promise<Order[]> {
 		const ordersModel = await OrderModel.findAll({ include: [{ model: OrderItemModel }] });
 

@@ -2,8 +2,9 @@ import { EventDispatcher } from "../../@shared/event/event-dispatcher";
 import { CustomerChangedAddressEvent } from "./customer-address-event";
 import { Sendwhencustomeraddressischangedhandler } from "./handler/Send-when-customer-address-is-changed.handler";
 
-describe("Customer changed of address event tests", () => {
-	it("should notify the event handlers of the change of address of a customer", () => {
+describe("Customer changed address tests", () => {
+
+	it("should send notify change address customer", () => {
 		const eventDispatcher = new EventDispatcher();
 		const eventHandler1 = new Sendwhencustomeraddressischangedhandler();
 
@@ -13,7 +14,7 @@ describe("Customer changed of address event tests", () => {
 
 		expect(eventDispatcher.eventHandlers["CustomerChangedAddressEvent"].length).toBe(1);
 
-		const eventPayload = {
+		const eventData = {
 			customer: {
 				id: "1",
 				name: "Antonio Passos",
@@ -32,7 +33,7 @@ describe("Customer changed of address event tests", () => {
 			}			
 		};
 
-		const customerCreatedEvent = new CustomerChangedAddressEvent(eventPayload);
+		const customerCreatedEvent = new CustomerChangedAddressEvent(eventData);
 
 		eventDispatcher.notify(customerCreatedEvent);
 

@@ -4,7 +4,8 @@ import SendLog2WhenCustomerIsCreatedHandler from "./handler/Send-log2-when-custo
 import CustomerCreatedEvent from "./customer-created.event";
 
 describe("Customer created event tests", () => {
-	it("should notify the event handlers of the creation of a product", () => {
+  
+	it("should send notify creation product", () => {
 		const eventDispatcher = new EventDispatcher();
 		const eventHandler1 = new SendLog1WhenCustomerIsCreatedHandler();
 		const eventHandler2 = new SendLog2WhenCustomerIsCreatedHandler();
@@ -17,7 +18,7 @@ describe("Customer created event tests", () => {
 
 		expect(eventDispatcher.eventHandlers["CustomerCreatedEvent"].length).toBe(2);
 
-		const eventPayload = {
+		const eventData = {
 			customer: {
 				id: "1",
 				name: "Antonio Passos",
@@ -25,7 +26,7 @@ describe("Customer created event tests", () => {
 			}			
 		};
 
-		const customerCreatedEvent = new CustomerCreatedEvent(eventPayload);
+		const customerCreatedEvent = new CustomerCreatedEvent(eventData);
 
 		eventDispatcher.notify(customerCreatedEvent);
 
